@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Chat</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!--css di bootstrap-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+         <!--css fatto da me-->
+         <!-- per poter inserire file statici come fogli di stile css o file js dobbiamo gestire le richieste a questi file statici. Lo facciamo usando il middlware-->
+         <link rel="stylesheet" href="/assets/css/contattaci.css" type="text/css"/>
+
+
+
+        <!-- Caricamento di jquery bootstrap dopo il caricamento degli elementi html -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+        <!--link per la chat-->
+    <link rel="stylesheet" type="text/css" href="/assets/css/chat.css">
+    <script src="http://code.jquery.com/jquery-3.0.0.slim.min.js"></script>
+
+
+    </head>
+    <body>
+        
+        <!-- importo la navbar -->
+        <%- include("./parziali/nav.ejs")  %>  <!-- con questo meccanismo possiamo includere contenuti uguali in piu pagine scrivendoli una sola volta-->
+
+        <h1>Pagina in cui andrà la chat</h1>
+
+
+        <form>
+            <div id="name-div"> 
+               <input id="name" name="name" autocomplete="off" autofocus placeholder="Enter your nickname" /> 
+                <button>Submit</button>
+            </div>
+            <div id="welcome"></div>
+            <ul id="messages"></ul>
+            <div id="input-div">
+                <input id="message" name="message" autocomplete="off" placeholder="Type your message here" />
+                <button>Send</button>
+            </div>
+        </form>
+    
+        <script>
+            websocket = new WebSocket("ws://localhost:8080/");
+            $('form').submit(function() {
+                name = $('#name').val() ? $('#name').val() : 'Anonymous';
+                $('#name-div').hide();
+                $('#welcome').text('Hello ' + name);
+                websocket.send(JSON.stringify({
+                    name: name,
+                    message: $('#message').val()
+                }));
+                $('#message').focus();
+                $('#message').val('');
+                return false;
+            });
+            websocket.onmessage = function(evt) {
+                $('#messages').append($('<li>').html(evt.data));
+            };
+            websocket.onerror = function(evt) {
+                $('#messages').append($('<li>').text('<span style="color: red;">ERROR:</span> ' + evt.data));
+            };
+        </script>
+
+
+        </html>
+
+
+
+
+
+    </body>
+</html>

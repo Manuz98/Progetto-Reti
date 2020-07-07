@@ -1,0 +1,91 @@
+
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+        <!--css di bootstrap-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+         <!--css fatto da me-->
+         <!-- per poter inserire file statici come fogli di stile css o file js dobbiamo gestire le richieste a questi file statici. Lo facciamo usando il middlware-->
+         <link rel="stylesheet" href="/assets/css/api.css" type="text/css"/>
+
+         <!-- javascript per la mappa-->
+         <script language=”JavaScript” type=”text/JavaScript” src="/assets/css/api.js"></script>
+
+
+
+
+        <!-- Caricamento di jquery bootstrap dopo il caricamento degli elementi html -->
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+            crossorigin="anonymous"></script>
+
+
+<script>
+  require("dotenv").config();
+  var chiave = process.env.API_KEY
+</script>
+
+<!-- codice per caricare la mappa-->
+<!-- info su come trattare l'api: https://developers.google.com/maps/documentation/javascript/tutorial#maps_map_simple-css  -->
+<script
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB1btUqo7bEOjwnh7vln2aoJaL_f0wXSdc&callback=initMap&libraries=&v=weekly"
+      defer
+    ></script>
+ 
+    <script>
+      (function(exports) {
+        "use strict";
+
+        function initMap() {
+          exports.map = new google.maps.Map(document.getElementById("map"), {
+            center: {
+              lat: -34.397,
+              lng: 150.644
+            },
+            zoom: 8
+          });
+        }
+
+        exports.initMap = initMap;
+      })((this.window = this.window || {}));
+    </script>
+  </head>
+      
+      
+      <script>
+        var map;
+          function initMap() {
+            map = new google.maps.Map(document.getElementById("map"), {
+              center: { lat: -34.397, lng: 150.644 },
+              zoom: 8
+            });
+          }
+          </script>
+
+
+<!-- fine gestione della-->
+
+
+    </head>
+    <body>
+        
+        <!-- importo la navbar -->
+        <%- include("./parziali/nav.ejs")  %>  <!-- con questo meccanismo possiamo includere contenuti uguali in piu pagine scrivendoli una sola volta-->
+
+        <h1>Pagina dove dobbiamo inserire la mappa e i servizi vari</h1>
+
+     
+        <div id="map"> </div>
+        
+
+    
+    </body>
+</html>
