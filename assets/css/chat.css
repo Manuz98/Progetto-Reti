@@ -1,35 +1,49 @@
-form input {
-    border: 0;
-    padding: 10px;
+form{
+    width:60%;
+    margin-left: 20%;
+}
+
+.form-control {
     width: 90%;
-    margin-right: .5%;
+   
 }
-form button {
-    width: 9%;
-    background: rgb(130, 224, 255);
-    border: none;
-    padding: 10px;
+.btn-success,.btn-primary{
+    width: 10%;
 }
-#name-div, #welcome {
-    background: #AAA;
-    padding: 10px;
+
+#name-div {
     width: 100%;
+    position: relative;
+    justify-content: center;
+    flex-wrap: nowrap;            /*cosi mi appaiono sulla stessa riga textarea e bottone*/
 }
+
+#welcome{
+    padding:1.6%;
+    background-color:lightgreen;
+    color:black;
+    border: 2px solid #dedede;
+    border-radius: 5px;
+}
+
+
 #input-div {
-    background: #000;
-    padding: 3px;
     position: fixed;
-    bottom: 0;
-    width: 100%;
+    bottom:0;
+    width:60%;
 }
 #messages {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    
 }
 #messages li {
-    padding: 5px 10px;
-}
-#messages li:nth-child(odd) {
-    background: #eee;
+    border: 2px solid #dedede;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 10px 0;
+    width: 80%;
+    margin-left: 10%;
 }

@@ -33,19 +33,24 @@
         <!-- importo la navbar -->
         <%- include("./parziali/nav.ejs")  %>  <!-- con questo meccanismo possiamo includere contenuti uguali in piu pagine scrivendoli una sola volta-->
 
-        <h1>Pagina in cui andrà la chat</h1>
+        <h1>Real-Time Chat</h1>
 
 
         <form>
+            <%if(user){%>
+            <div id="welcome">Hello <%=user.displayName%></div>
+            <input type="hidden" id="name" name="name" value=<%=user.displayName%>/>
+            <%}else{%>
             <div id="name-div"> 
-               <input type="textarea" id="name" name="name" autocomplete="off" autofocus placeholder="Enter your nickname" /> 
-                <button>Submit</button>
+               <input class="form-control float-left" type="textarea" id="name" name="name" autocomplete="off" autofocus placeholder="Enter your nickname"/> 
+                <button class="btn btn-success float-right">Submit</button>
             </div>
             <div id="welcome"></div>
-            <ul id="messages"></ul>   <!-- dove si tiene conto della history dei messaggi-->
+            <%}%>
+            <ul id="messages"></ul>   <!-- dove si tiene conto della history dei messaggi--> 
             <div id="input-div">
-                <input type="textarea" id="message" name="message" autocomplete="off" placeholder="Type your message here" />
-                <button>Send</button>
+                <input class="form-control float-left" type="textarea" id="message" name="message" autocomplete="off" placeholder="Type your message here" />
+                <button class="btn btn-primary float-right">Send</button>
             </div>
         </form>
     
@@ -58,11 +63,15 @@
            {
                 name = $('#name').val() ? $('#name').val() : 'Anonimo';     //prendo il nome dalla textarea, se è stato inserito, altrimenti metto nella variabile anonimo
                 $('#name-div').hide();                                     //nascondi la textbox dove prendo il nome
+                if($('#welcome').context == null)
+                {
                 $('#welcome').text('Hello ' + name);                        //faccio apparire il messaggio di benvenuto nella div apposita
+                }
                 websocket.send(JSON.stringify({
                     name: name,
                     message: $('#message').val()
                 }));
+                
                 $('#message').focus(); //messo il nome il cursore per scrivere riva in automatico sulla casella
                 $('#message').val(''); //messo il nome  cancello la textarea da eventuali scritte precedenti
                 return false;
