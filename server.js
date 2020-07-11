@@ -1,7 +1,9 @@
-
-require("dotenv").config(); //ancora non so come usare .env nei file ejs
+require("dotenv").config();
+require('./passport-setup');
 var express = require('express');   
 var bodyParser = require("body-parser");  
+const passport=require('passport');
+const cookieSession = require('cookie-session');
 
 //npm install express   ---->   modulo che ci permette di effettuare chiamate http 
 //npm install body-parser  ---->  modulo che permette il passaggio di parametri dal client al server. lo usiamo per la gestione dei post dalle form 
@@ -22,32 +24,66 @@ app.use('/assets',express.static('assets')) //funzione static di express fatta a
 //in questo modo quando riceviamo una richiesta ad un url /assets/..   verà mappata alla cartella asstes
 
 
+app.use(passport.initialize()); //inizializza passport
+app.use(passport.session());    //passport session                                         
+
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2']
+}));
+
+app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true })); //sessione express con opzioni
 
 
 //se usiamo app.set come visto sopra non c'è piu bisogno di __dirname.  i file che gli passeremo li andrà a cercare direttamente nella cartella views di default
-app.get('/', function(req, res){      //get alla root
-  res.render("index")  
+app.get('/',function(req, res){      //get alla root
+  res.render("login",{user:req.session.user}) 
 });
 
+app.get('/index',function(req, res){      //get alla index
+    if(!req.session.user){
+        res.redirect("/")
+    }
+    res.render("index",{user:req.session.user}) 
+});
 
 app.get('/contattaci', function(req, res){      //get alla pagina contattaci
-    res.render("contattaci")  
+    if(!req.session.user){
+       res.redirect("/")
+    }
+    res.render("contattaci",{user:req.session.user})  
 });
 
 
 app.get('/api', function(req, res){      //get alla pagina contattaci
-    res.render("api")  
-    
-  });
+    if(!req.session.user){
+        res.redirect("/")
+     }
+    res.render("api",{user:req.session.user})  
+ });
 
-  app.get('/chat', function(req, res){      //get alla pagina contattaci
-    res.render("chat")  
-  });
+app.get('/chat', function(req, res){      //get alla pagina contattaci
+    if(!req.session.user){
+        res.redirect("/")
+     }
+    res.render("chat",{user:req.session.user})  
+});
+
+app.get('/google', passport.authenticate('google', { scope: ['profile','email','https://www.googleapis.com/auth/calendar.events'] })); //funzione chiamata una volta cliccato il bottone signin
+
+app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), //funzione chiamata un volta fatto il login
+  function(req, res) {
+    // Successful authentication, redirect home.
+    req.session.user=req.user; //salvo i dati del profilo nella sessione
+    res.render("index",{user:req.session.user});//vengo rediretto su index passando user (in cui ci sono i dati dell'utente)
+});
   
-
-
-
-
+app.get('/logout', function(req,res){ //funzione chiamata nel momento del logout
+    res.session=null;
+    req.session.user=null;
+    req.logout();    
+    res.redirect('/'); 
+}); 
 //parte per la gestione della CHAT:
 //documentazione ed esempi su modulo ws: https://www.npmjs.com/package/ws
 const WebSocketServer = require('ws').Server,       //richiedo il modulo che ci permette di creare websocket e creiamo un server
