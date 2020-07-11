@@ -38,36 +38,41 @@
 
         <form>
             <div id="name-div"> 
-               <input id="name" name="name" autocomplete="off" autofocus placeholder="Enter your nickname" /> 
+               <input type="textarea" id="name" name="name" autocomplete="off" autofocus placeholder="Enter your nickname" /> 
                 <button>Submit</button>
             </div>
             <div id="welcome"></div>
-            <ul id="messages"></ul>
+            <ul id="messages"></ul>   <!-- dove si tiene conto della history dei messaggi-->
             <div id="input-div">
-                <input id="message" name="message" autocomplete="off" placeholder="Type your message here" />
+                <input type="textarea" id="message" name="message" autocomplete="off" placeholder="Type your message here" />
                 <button>Send</button>
             </div>
         </form>
     
         <script>
-            websocket = new WebSocket("ws://localhost:8080/");
-            $('form').submit(function() {
-                name = $('#name').val() ? $('#name').val() : 'Anonymous';
-                $('#name-div').hide();
-                $('#welcome').text('Hello ' + name);
+           const websocket = new WebSocket("ws://localhost:8080/");   //il client stabilisce la connessione con il websocker su localhost:8080
+           
+          // websocket.emit('JoinRoom',{username,room});   //li devo prende dal dom poi sti due valori
+           
+           $('form').submit(function()           //al submit della form
+           {
+                name = $('#name').val() ? $('#name').val() : 'Anonimo';     //prendo il nome dalla textarea, se è stato inserito, altrimenti metto nella variabile anonimo
+                $('#name-div').hide();                                     //nascondi la textbox dove prendo il nome
+                $('#welcome').text('Hello ' + name);                        //faccio apparire il messaggio di benvenuto nella div apposita
                 websocket.send(JSON.stringify({
                     name: name,
                     message: $('#message').val()
                 }));
-                $('#message').focus();
-                $('#message').val('');
+                $('#message').focus(); //messo il nome il cursore per scrivere riva in automatico sulla casella
+                $('#message').val(''); //messo il nome  cancello la textarea da eventuali scritte precedenti
                 return false;
             });
+
             websocket.onmessage = function(evt) {
-                $('#messages').append($('<li>').html(evt.data));
+                $('#messages').append($('<li>').html(evt.data));            //quando il socket client invia un messaggio lo aggiungo alla lista nella div messaggi
             };
             websocket.onerror = function(evt) {
-                $('#messages').append($('<li>').text('<span style="color: red;">ERROR:</span> ' + evt.data));
+                $('#messages').append($('<li>').text('<span style="color: red;">ERROR:</span> ' + evt.data));  //anche quando ho un errore isualizzo l'errore appeso alla lista nel box dei messaggi
             };
         </script>
 

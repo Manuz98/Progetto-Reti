@@ -12,7 +12,7 @@ var bodyParser = require("body-parser");
 var app = express();
 
 app.set('view engine', 'ejs');    //usiamo il metodo set di app (variabile express()) per settare le view engine
-                                  // e come secondo parametro gli segnaliamo che le nostre view saranno file ejs
+                                  //e come secondo parametro gli segnaliamo che le nostre view saranno file ejs
 
 
 //middleware per gestire richieste a file statici e poter quindi usare fogli di stile e altri file esterni e parametri tramite post
@@ -49,27 +49,27 @@ app.get('/api', function(req, res){      //get alla pagina contattaci
 
 
 //parte per la gestione della CHAT:
-
-WebSocketServer = require('ws').Server,
+//documentazione ed esempi su modulo ws: https://www.npmjs.com/package/ws
+const WebSocketServer = require('ws').Server,       //richiedo il modulo che ci permette di creare websocket e creiamo un server
     wss = new WebSocketServer({
-        port: 8080
+        port: 8080                                //il websocket server sarà in ascolto sulla porta 8080
     });
 
-    wss.broadcast = function broadcast(data) {
-        wss.clients.forEach(function each(client) {
-            client.send(data);
+wss.broadcast = function broadcast(data)
+{
+        wss.clients.forEach(function each(client){     //cicliamo tutti i client connessi al socketserver wss e definiamo una funzione per gestire il loro comportamento
+            client.send(data);                       //manda il messaggio a ognuno dei client connessi
         });
     };
     
-    wss.on('connection', function(ws) {
-        console.log('connected');
-        ws.on('message', function(msg) {
-            data = JSON.parse(msg);
-            if (data.message) wss.broadcast('<strong>' + data.name + '</strong>: ' + data.message);
+    wss.on('connection', function(ws){          //resta in attesa di una connessione da parte del browser, definisco la funzione di callback
+            console.log('connected');               
+            ws.on('message', function(msg) {        //ws = connessione socket stabilita.  quel socket resta in attesa di un messaggio. Definisco una callback per gestire i messaggi
+              data = JSON.parse(msg);             //convertiamo il messaggio in un oggetto json          
+            if (data.message) wss.broadcast('<strong>' + data.name + '</strong>: ' + data.message);   //mostriamo il nome del client e il messaggio tramite una funzione broadcast del websocket server
         });
-    });
-
-
+    
+});
 
 
 
