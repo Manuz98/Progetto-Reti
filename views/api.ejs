@@ -25,7 +25,7 @@
         <!-- chiamata api a google map per poter visualizzare la mappa, nella chiamata dobbiamo anche mettere la libreria places che ci servirà per la ricerca dei punti di interesse-->
 <!-- info su come trattare l'api: https://developers.google.com/maps/documentation/javascript/tutorial#maps_map_simple-css  -->
 <script
-src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&libraries=places&v=weekly"
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv0S_RSwda2sNfvrpJqlUa5Bmdxi4MQ9U&callback=initMap&libraries=places&v=weekly"
 defer
 ></script>   <!-- effettuo a chiamata a maps javascript api che mi restituisce una mappa-->
 
@@ -39,7 +39,6 @@ defer
   var geocoder;        
   var position;             //centro della mappa
   var userInfoWindow;         //quella visualizzata nella mappa alla posizione corrente dell'utente
-  
   var markers=[];
   
   //FUNZIONE CHE INIZIALIZZA LA MAPPA. ALL'INIZIO SARà CENTRATA SULLA NOSTRA POSIZIONE E  VEDREMO I LUOGHI DI INTERESSE INTORNO A NOI
@@ -72,7 +71,6 @@ defer
           lat: p.coords.latitude,
           lng: p.coords.longitude 
         };
-       
         userInfoWindow.setPosition(position);    //dopodiche posizioniamo la infowindow in quel punto
         userInfoWindow.setContent("Your Position !!!!! <br> poi dovro metterci i dati dell'utente prei da oauth qui");  
         userInfoWindow.open(map);

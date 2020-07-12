@@ -37,6 +37,9 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 
 //se usiamo app.set come visto sopra non c'è piu bisogno di __dirname.  i file che gli passeremo li andrà a cercare direttamente nella cartella views di default
 app.get('/',function(req, res){      //get alla root
+  if(req.session.user){
+    res.redirect("index")
+  }   
   res.render("login",{user:req.session.user}) 
 });
 
