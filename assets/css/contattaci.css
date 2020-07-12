@@ -106,7 +106,7 @@ p,li,ul{text-align: center; list-style-type: none; padding:0;}
     background-color: #e4405f;
   }
   .imgsfondo{
-    background-image: url(/assets/img/index.jpg);
+    background-color:lightcyan;
     display: table;
     background-size:cover;
     background-position:center center;

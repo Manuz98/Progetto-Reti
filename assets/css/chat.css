@@ -1,3 +1,7 @@
+body{
+    background-color:lightcyan;
+}
+
 form{
     width:60%;
     margin-left: 20%;
@@ -31,11 +35,13 @@ form{
     position: fixed;
     bottom:0;
     width:60%;
+
 }
 #messages {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    margin-bottom:5%;
     
 }
 #messages li {
