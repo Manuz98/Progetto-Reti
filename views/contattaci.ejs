@@ -10,8 +10,8 @@
          <!--css fatto da me-->
          <!-- per poter inserire file statici come fogli di stile css o file js dobbiamo gestire le richieste a questi file statici. Lo facciamo usando il middlware-->
          <link rel="stylesheet" href="/assets/css/contattaci.css" type="text/css"/>
-
-
+        <!--css per icone facebook e instagram-->
+         <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- Caricamento di jquery bootstrap dopo il caricamento degli elementi html -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -26,8 +26,79 @@
         
         <!-- importo la navbar -->
         <%- include("./parziali/nav.ejs")  %>  <!-- con questo meccanismo possiamo includere contenuti uguali in piu pagine scrivendoli una sola volta-->
-
-        <h1>Pagina dei contatti del nostro sito</h1>
+<div class="imgsfondo">
+        <div class="container fluid">
+        <div class="row justify-content-center text-center"><h1 style=" margin-top: 10vh;">Gli sviluppatori</h1></div>
+      <div class="row">
+        <div class="col-sm-4" align="center">
+          <div class="boxx">
+            <div class="imgBxx">
+              <img src="img/manuel.jpg">
+            </div>
+            <div class="content">
+              <h3>Grossi Manuel </h3>
+              <br>
+              <pp><b>Nome:</b> Manuel</pp><br>
+              <pp><b>Cognome:</b> Grossi</pp><br>
+              <pp><b>Data di nascita:</b> 03/08/1998</pp><br>
+              <pp><b>Studente di Ingegneria Informatica</b></pp><br>
+              <pp> @Università di Roma la Sapienza</pp>
+            </div>
+          </div>
+          <div class="row justify-content-center text-center miarow" style="margin-top:45px;">
+            <div class="insta" style="margin-left:10px;"><a href="https://www.instagram.com/grossi_manuel/?hl=it" target="_blank"><i class="fa fa-instagram"></i></a></div> 
+            <div class="face" style="margin-left:10px;"><a href="mailto:grossi.1792456@studenti.uniroma1.it" target="_blank"><i class="fa fa-envelope-o"></i></a></div>
+            </div>
+            
+        </div>
+        <div class="col-sm-4" align="center">
+          <div class="boxx">
+            <div class="imgBxx">
+              <img src="/img/marco.jpg">
+            </div>
+            <div class="content">
+              <h3>Cardinali Marco </h3>
+              <br>
+              <pp><b>Nome:</b> Marco</pp><br>
+              <pp><b>Cognome:</b> Cardinali</pp><br>
+              <pp><b>Data di nascita:</b> 23/04/1998</pp><br>
+              <pp><b>Studente di Ingegneria Informatica</b></pp><br>
+              <pp>@Università di Roma la Sapienza</pp>
+            </div>
+          </div>
+          <div class="row justify-content-center text-center miarow" style="margin-top:45px;">
+            <div class="insta" style="margin-left:10px;"><a href="https://www.instagram.com/marcocardinali98/?hl=it" target="_blank"><i class="fa fa-instagram"></i></a></div>
+            <div class="face" style="margin-left:10px;"><a href="mailto:cardinali.1797403@studenti.uniroma1.it" target="_blank"><i class="fa fa-envelope-o"></i></a></div>
+            </div>
+        </div>
+        <div class="col-sm-4" align="center">
+            <div class="boxx">
+              <div class="imgBxx">
+                <img src="img/marco.jpg">
+              </div>
+              <div class="content">
+                <h3>Grifoni Christian </h3>
+                <br>
+                <pp><b>Nome:</b> Christian</pp><br>
+                <pp><b>Cognome:</b> Grifoni</pp><br>
+                <pp><b>Data di nascita:</b> 09/01/1999</pp><br>
+                <pp><b>Studente di Ingegneria Informatica</b></pp><br>
+                <pp> @Università di Roma la Sapienza</pp>
+              </div>
+            </div>
+            <div class="row justify-content-center text-center miarow" style="margin-top:45px;">
+              <div class="insta" style="margin-left:10px;"><a href="https://www.instagram.com/christiangrifoni/?hl=it" target="_blank"><i class="fa fa-instagram"></i></a></div> 
+              <div class="face" style="margin-left:10px;"><a href="mailto:grifoni.1791973@studenti.uniroma1.it" target="_blank"><i class="fa fa-envelope-o"></i></a></div>
+            </div>
+            <br>
+            
+          </div>
+      </div>
+      <br><br>
+    </div>
+  </div>
+    
+    
 
 
 

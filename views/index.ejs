@@ -27,8 +27,106 @@
       <!-- importo la navbar -->
       <%- include("./parziali/nav.ejs")  %>
       
-        <h1>Pagina iniziale del nostro progetto</h1>
+       
 
+      <div class="imgsfondo">
+           <div class="container-fluid">
+            
+           
+            
+            
+            <div class="row justify-content-center">
+                <div class="col-sm-3">
+                  <input type="number" name="eta"class="form-control" placeholder="Età">
+                </div>
+                <div class="col-sm-3">
+                  <input type="number" name="peso"class="form-control" placeholder="Peso corporeo (Kg)">
+                </div>
+              </div>
+              <br>
+              <div class="row justify-content-center">
+                <div class="col-sm-3">
+                  <input type="number" name="altezza" class="form-control" placeholder="Altezza (cm)">
+                </div>
+                <div class="col-sm-3">
+                  <select id="inputState" name="sesso" class="form-control" placeholder="Sesso">
+                    <option>Femmina</option>
+                    <option>Maschio</option>
+                  </select>
+                </div>
+                </div>
+                <br>
+                <h1>Cosa vuoi calcolare?</h1>
+                <br>
+            <div class="row justify-content-center ">
+                <div class="col-sm-2">
+                    <button type="submit" style="width: 30vh;" name="calcolametabolismo" id="calcolametabolismo" class="btn btn-primary calcolametabolismo">Metabolismo basale</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" style="width: 30vh;" name="massagrassa" class="btn btn-primary calcolamassagrassa">Massa grassa</button>
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" style="width: 30vh;" name="massamagra" class="btn btn-primary calcolamassamagra">Massa magra</button>
+                </div>
+                
+
+                
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <input type="text" name="display" id="display"  disabled class="display-calc">
+                
+            </div>
+            <div class="row justify-content-center">
+                <p id="demo"></p>
+            </div>
+           
+            
+
+        </div>
+    
+    </div>
+
+
+        
+        <script type="text/javascript">
+            
+                $('.calcolametabolismo').click(function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var eta = $('#eta').val();
+                    var altezza = $('#altezza').val();
+                    var formula = eval("eta + altezza") ;
+                    document.getElementById("display").innerHTML = formula;
+                    window.alert(formula);
+                  
+                   
+
+                    
+                    
+                    
+
+                    var res = a + b + c;
+                });
+                $('.calcolamassagrassa').click(function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var eta = $('#eta').val();
+                    var altezza = $('#altezza').val();
+                    var formula = eta+altezza;
+                    $('#display:text').val(formula);
+                });
+                $('.calcolamassamagra').click(function(event){
+                    event.preventDefault();
+                    event.stopPropagation();
+                    var eta = $('#eta').val();
+                    var altezza = $('#altezza').val();
+                    var formula = eta+altezza;
+                    $('#display:text').val(formula);
+                });
+        
+        </script>
+          
 
 
     </body>

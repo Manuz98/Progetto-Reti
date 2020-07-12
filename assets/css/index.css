@@ -2,3 +2,26 @@
 h1{text-align: center; font-size: 300%;}
 h2{text-align: center; font-size: 250%;}
 p,li,ul{text-align: center; list-style-type: none; padding:0;}
+.imgsfondo{
+    background-color: lightcyan;
+    background-image: url(/img/index.jpg);
+    display: table;
+    background-size:cover;
+    background-position:center center;
+    background-repeat: no-repeat;
+    position: absolute;
+    padding-top: 7vh;
+    height:100%;
+    width:100%;
+  }
+.display-calc {
+    background: none;
+    color: #2c3e50;
+    font-size: 24pt;
+    border: #00eeff solid 4px;   
+    width: 40vh;
+    height: 6vh;
+}
+body{
+    background-image: url(index.jpg);
+}
