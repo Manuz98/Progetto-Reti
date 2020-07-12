@@ -72,7 +72,7 @@ app.get('/chat', function(req, res){      //get alla pagina contattaci
     res.render("chat",{user:req.session.user})  
 });
 
-app.get('/google', passport.authenticate('google', { scope: ['profile','email','https://www.googleapis.com/auth/calendar.events'] })); //funzione chiamata una volta cliccato il bottone signin
+app.get('/google', passport.authenticate('google', { scope: ['profile','email'] })); //funzione chiamata una volta cliccato il bottone signin
 
 app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), //funzione chiamata un volta fatto il login
   function(req, res) {
