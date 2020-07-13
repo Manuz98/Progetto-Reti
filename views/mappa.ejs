@@ -1,0 +1,341 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!--css di bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+     <!--css fatto da me-->
+     <!-- per poter inserire file statici come fogli di stile css o file js dobbiamo gestire le richieste a questi file statici. Lo facciamo usando il middlware-->
+     <link rel="stylesheet" href="/assets/css/mappa.css" type="text/css"/>
+
+
+    <!-- Caricamento di jquery bootstrap per la navbar -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+
+
+        <!-- chiamata api a google map per poter visualizzare la mappa, nella chiamata dobbiamo anche mettere la libreria places che ci servirà per la ricerca dei punti di interesse-->
+<!-- info su come trattare l'api: https://developers.google.com/maps/documentation/javascript/tutorial#maps_map_simple-css  -->
+<script
+src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&libraries=places&v=weekly"
+defer
+></script>   <!-- effettuo a chiamata a maps javascript api che mi restituisce una mappa-->
+
+<script>
+
+  var rate_value;            //per capire cosa sta cercando l'utente
+  var map;                  //per la mappa
+  var service;              //per la chiamata a nearbysearch
+  var infowindow;           //per le info sui luoghi di interesse
+  var request;               //parametro per nearbysearch, per i luoghi di interesse
+  var geocoder;        
+  var position;             //centro della mappa
+  var userInfoWindow;         //quella visualizzata nella mappa alla posizione corrente dell'utente
+  var markers=[];
+  
+  //FUNZIONE CHE INIZIALIZZA LA MAPPA. ALL'INIZIO SARà CENTRATA SULLA NOSTRA POSIZIONE E  VEDREMO I LUOGHI DI INTERESSE INTORNO A NOI
+  
+  function initMap()  //funzione per inizializzare la mappa a una certa latitudine e longitudine e con un certo zoom
+  {
+    var centro = new google.maps.LatLng(41.9109,12.4818); //inizializzo la mappa a roma, in caso in cui l'utente non volesse autorizzare la geolocalizzazione
+
+    map = new google.maps.Map(document.getElementById('map'), {         //creo un nuovo oggetto mappa di google passandogli il nodo del DOM nel quale posizionarla e altri parametri come lo zoom e la posizione iniziale
+        center: centro,
+        zoom: 13
+      });
+  
+    request = {                  //qui inserisco tutti i parametri richiesti dal metodo nearbysearch
+      location: centro,         //poi da prendere da una text area dal client
+      radius: '8047',           //dovremo prenderlo da un radio button o un dropdown list 
+      type: ['gym']    //dovremo prenderlo da una lista cosi che l'utente possa scegliere
+    };
+  
+  
+  //parte per la geolocalizzazione
+    userInfoWindow = new google.maps.InfoWindow();
+  
+    if(navigator.geolocation)     //prende la posizione dell'utente attraverso il browser
+     {
+       navigator.geolocation.getCurrentPosition(function(p){                     //chiamo il metodo getcurrent position di navigator.geolocation e associo una callback
+        
+         position =                           //nel caso in cui non abbiamo avuto alcun errore, settiamo la posizione attuale
+        {
+          lat: p.coords.latitude,
+          lng: p.coords.longitude 
+        };
+        userInfoWindow.setPosition(position);    //dopodiche posizioniamo la infowindow in quel punto
+        userInfoWindow.setContent("Your Position !!!!! <br> poi dovro metterci i dati dell'utente prei da oauth qui");  
+        userInfoWindow.open(map);
+  
+        map.setCenter(position);        //appena carico la mappa localizzo l'utente e centro li la mappa oltre a visualizzare un popover in quel punto
+       },
+  
+       function()
+       {
+        locationerror("server di geolocalizzazione non risponde", map.center);            //deve esserci anche una seconda callack in caso di errore
+       });         
+     
+     }//if
+    else 
+    {
+      locationerror("geolocalizzazione non disponibile", map.center);
+    }
+  
+  //FINE GEOLOCALIZZAZIONE
+  
+  
+  
+  //PARTE DI RICERCA DEI LUOGHI DI INTERESSE NELLE VICINANZE
+  
+    infowindow = new google.maps.InfoWindow();  //aprira la finestra informativa sulla mappa
+  
+    service = new google.maps.places.PlacesService(map);   //nearbysearch metodo dell'oggetto PlaceService di google
+    service.nearbySearch(request, callback);                //ritornerà un array di oggetti PlaceResults (info su questo tipo di oggetti: https://developers.google.com/maps/documentation/javascript/reference#PlaceResult)
+  
+    //adesso facciamo in modo che se l'utente sposta la mappa continueranno ad apparire markers semplicemente cliccando con il destro sulla mappa
+  
+    google.maps.event.addListener(map,'rightclick', function(event){   //aggiungo alla mappa un eventListener che triggera la funzione definita di seguito quando si effettua un click destro sulla mappa con il mouse
+  
+      map.setCenter(event.latLng)  //metodo della libreria places per risettare il centro
+      //clearResults(markers)       //cancello i vecchi markers quando riclicco (non mi piace voglio che restino tutti)
+  
+      if (document.getElementById('r1').checked) 
+      {
+      rate_value = "gym";
+      }
+      else if (document.getElementById('r2').checked) 
+      {
+      rate_value = "pool";
+      }
+      else if (document.getElementById('r3').checked) 
+      {
+      rate_value = "park"
+      }
+      else if (document.getElementById('r4').checked) 
+      {
+      rate_value = "football";
+      }
+  
+  //window.alert(rate_value);
+       request = {
+        location: event.latLng,
+        radius: 8047,                        //anche qui dovremo risettare in base a cio che ha inserito l'utente
+        types: [rate_value]
+      };
+  
+      service.nearbySearch(request, callback);  //richiamo nearbysearch dopo essermi spostato
+    });
+  
+  //FINE RICERCA LUOGHI DI INTERESSE
+  
+  //INIZIO GEOCODER
+  
+     geocoder = new google.maps.Geocoder();  // documentazione: https://developers.google.com/maps/documentation/javascript/geocoding
+  
+      //BUTTON LISTENERS
+      document.getElementById("submit").addEventListener("click", function() {   //se premo submit mi manda al luogo indicato
+      geocodeAddress(geocoder, map);
+    });
+  
+    document.getElementById("submit2").addEventListener("click", function() {    //se premo submit 2 mi riporta alla ia posizione
+      geocodeAddress2(geocoder, map);
+    });
+  
+    document.getElementById("cancella").addEventListener("click", function() {  //se premo cancella toglie tutti i marker fino adesso messi sulla mappa
+      clearResults(markers);
+    });
+  
+  //FINE GEOCODER
+
+  //INIZIO AUTOCOMPLETE    documentazione: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete
+  var input = document.getElementById('indirizzo'); //prenso l'indirizzo da completare dalla textarea
+
+  var autocomplete = new google.maps.places.Autocomplete(input);   //uso l'oggetto Autocomplete della libreria places
+  //autocomplete.bindTo('bounds', map);      //setto i limiti della mappa, in questo modo l'oggetto autocomplete usa il bound attuale  della mappa  come proprieta bound nella richiesta
+  autocomplete.setFields(
+            ['address_components', 'geometry', 'icon', 'name']);  //i campi che voglio appaiano nell'autocompletamento
+
+          autocomplete.addListener('place_changed', function() {   //
+          infowindow.close();
+          marker.setVisible(false);
+          var place = autocomplete.getPlace();
+          if (!place.geometry) {   //se non ci sono dati da suggerire per il luogo inserito
+            
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+
+          
+         // if (place.geometry.viewport) {
+         //   map.fitBounds(place.geometry.viewport);
+         // } else {
+            map.setCenter(place.geometry.location);//setto la mappa con il luogo inserito al centro
+            map.setZoom(17);  //decido lo zoom
+         // }
+          marker.setPosition(place.geometry.location);  //posiziono un marker nel luogo inserito
+          marker.setVisible(true);
+
+          var address = '';
+          if (place.address_components) {
+            address = [
+              (place.address_components[0] && place.address_components[0].short_name || ''),
+              (place.address_components[1] && place.address_components[1].short_name || ''),
+              (place.address_components[2] && place.address_components[2].short_name || '')
+            ].join(' ');
+          }
+
+          infowindowContent.children['place-icon'].src = place.icon;
+          infowindowContent.children['place-name'].textContent = place.name;
+          infowindowContent.children['place-address'].textContent = address;
+          infowindow.open(map, marker);
+        });
+  
+  
+  
+  
+  
+  } //initMap
+  
+  function geocodeAddress2(geocoder, resultsMap) {    //documentazione: https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+    
+    geocoder.geocode({ location: position }, function(results, status) {
+      if (status === "OK") {
+        resultsMap.setCenter(results[0].geometry.location);
+        //var marker = new google.maps.Marker({                        //non c'è bisogno d creare un altro marker sulla mia posizione
+         // map: resultsMap,
+        //  position: results[0].geometry.location
+        //});
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+  
+  function geocodeAddress(geocoder, resultsMap) {    //documentazione: https://developers.google.com/maps/documentation/javascript/examples/geocoding-simple
+    var address = document.getElementById("indirizzo").value;
+    geocoder.geocode({ address: address }, function(results, status) {
+      if (status === "OK") {
+        resultsMap.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({                      //volendo posso cancellare i marker di geocoder creando un array di soli questi marker e aggiungendoli qui con la push e create marker e svuotandoli prima di ogni nuovo geocoding
+          map: resultsMap,
+          position: results[0].geometry.location
+        });
+      } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+  }
+  
+  //TUTTE LE FUNZIONI AUSILIARIE USATE IN initMap
+  
+  function callback(results, status)  //gestira l'array risultante dalla chiamata a nearbysearch
+  {
+    if (status == google.maps.places.PlacesServiceStatus.OK) //se è andato tutto bene
+    {
+      for (var i = 0; i < results.length; i++) //scorro tutti i luoghi di interesse trovati
+      {
+        markers.push(createMarker(results[i])); //li passo uno a uno alla funzione createMarker, il risultato della stessa (singolo marker) viene aggiunto mano mano ad un array di marker
+      }
+    }
+  }
+  
+  
+  
+  function createMarker(place)            //la funzione creera un marker sulla mappa map nella posizione passatagli
+  {
+    var marker = new google.maps.Marker({
+      map: map,
+      position: place.geometry.location
+    })
+  google.maps.event.addListener(marker, 'click', function(){       //aggiungiamo un listener alla mappa:  al passaggio del mouse su un marker viene triggerata la funzione di seguito
+  
+  var popover = "nome = "+place.name +"<br>"+"business status ="+ place.business_status +"<br>"+" rating = " + place.rating
+  infowindow.setContent(popover);       //nome del luogo come contenuto della finestra informativa
+  infowindow.open(map,this);              //apriamo la finestra informativa
+  
+  }); //altri possibili parametri di infowindow su documentazione google: https://developers.google.com/maps/documentation/javascript/infowindows
+      //poi altri possibili parametri del placeresult object che possiamo passare a setContent li trovo in:  https://developers.google.com/maps/documentation/javascript/reference#PlaceResult
+      /*
+      Properties (dell'oggetto place): address_components, adr_address, aspects, business_status, formatted_address, formatted_phone_number, 
+      geometry, html_attributions, icon, international_phone_number, name, opening_hours, permanently_closed, photos, place_id, plus_code,
+      price_level, rating, reviews, types, url, user_ratings_total, utc_offset, utc_offset_minutes, vicinity, website*/
+  
+  return marker;  //ritorno il marker creato
+  
+  } //createMarker
+  
+  
+  function clearResults(markers)      //cancella dalla mappa i vecchi marker e li toglie dall'array che usiamo per gestirli
+  {
+      for (var i = 0; i < markers.length; i++)
+      {
+          markers[i].setMap(null);
+      }
+    markers=[];
+  
+  }
+  
+  function locationerror(content,position){     //gestisce il caso in cui si riscontri un errore nella geolocalizzazione
+  
+  window.alert(content);
+  }
+  
+  
+  
+  
+  </script>
+
+</head>
+<body>
+      
+               
+  <%- include("./parziali/nav.ejs")  %>  <!-- con questo meccanismo possiamo includere contenuti uguali in piu pagine scrivendoli una sola volta-->
+
+  <h1>Cerca i punti fitness piu vicini:</h1>
+            
+  
+
+    <div id="rates" class="btn-group btn-group-toggle" data-toggle="buttons">
+      <label class="btn btn-secondary active">
+        <input type="radio" name="options" id="r1" autocomplete="off" checked value="gym"> palestre
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="r2" autocomplete="off" value="swimming pool"> piscine
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="r3" autocomplete="off" value="public park"> parchi
+      </label>
+      <label class="btn btn-secondary">
+        <input type="radio" name="options" id="r4" autocomplete="off" value="football"> campi da calcio
+      </label>
+    </div>
+
+  <div id="form">
+    
+      <input type="textarea" class="form-control form-control-lg" placeholder="Dove vuoi cercare?" id="indirizzo">
+      <input value="vai" class="btn btn-success btn-block" type="button" id="submit">
+      <input value="pulisci" class="btn btn-danger btn-block"  type="button" id="cancella">
+      <input value="riposiziona" class="btn btn-primary btn-block" type="button" id="submit2">  
+    
+    
+    
+  </div>
+                    
+
+
+    <div id="map"></div>
+</body>
+                
+                    
+              
+            
+</body>
+</html>

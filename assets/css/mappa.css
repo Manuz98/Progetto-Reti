@@ -1,0 +1,46 @@
+h1{text-align: center; font-size: 150%;}
+h2{text-align: center; font-size: 100%;}
+
+
+#map {
+    height: 80%;
+    width: 80%;
+    margin-left:10%;
+  }
+#form{
+  width: 80%;
+  margin-left:10%;
+}
+
+
+#submit,#submit2,#cancella{
+  font-size: xx-large;
+}
+
+#r1,#r2,#r3,#r4{
+
+  width: fit-content;
+}
+
+#rates{
+  width: 80%;
+    margin-left:10%;
+}
+
+textarea { /* Stili specifici per la teaxtarea */
+  background: #1C1C1C url('images/social_balloon.png') no-repeat 235px 95px; /* Sfondo con immagine */
+  font-size: 12px;
+  height: 200px;
+  width: 320px;
+  overflow: hidden; /* disabilitare la scrollbar in IE */
+  }
+
+
+  /* Optional: Makes the sample page fill the window. */
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+

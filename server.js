@@ -4,7 +4,8 @@ var express = require('express');
 var bodyParser = require("body-parser");  
 const passport=require('passport');
 const cookieSession = require('cookie-session');
-
+const swaggerUi=require('swagger-ui-express');
+const swaggerDocument=require('./swagger.json');
 //npm install express   ---->   modulo che ci permette di effettuare chiamate http 
 //npm install body-parser  ---->  modulo che permette il passaggio di parametri dal client al server. lo usiamo per la gestione dei post dalle form 
 //npm install ejs   -->  installiamo EJS che ci permetterà di creare i template(nella cartella view) ai quali potremo anche passare dati dinamicamente.
@@ -22,7 +23,7 @@ app.set('view engine', 'ejs');    //usiamo il metodo set di app (variabile expre
 app.use(bodyParser.urlencoded({ extended: false }));  //usato per permettere il passagio dei parametri tramite post
 app.use('/assets',express.static('assets')) //funzione static di express fatta apposta per gestire i file statici
 //in questo modo quando riceviamo una richiesta ad un url /assets/..   verà mappata alla cartella asstes
-
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(passport.initialize()); //inizializza passport
 app.use(passport.session());    //passport session                                         
@@ -58,11 +59,11 @@ app.get('/contattaci', function(req, res){      //get alla pagina contattaci
 });
 
 
-app.get('/api', function(req, res){      //get alla pagina contattaci
+app.get('/mappa', function(req, res){      //get alla pagina contattaci
     if(!req.session.user){
         res.redirect("/")
      }
-    res.render("api",{user:req.session.user})  
+    res.render("mappa",{user:req.session.user})  
  });
 
 app.get('/chat', function(req, res){      //get alla pagina contattaci
@@ -118,9 +119,8 @@ wss.broadcast = function broadcast(data)
 //NOTA:  nodemail modulo che potrei usare in futuro per mandare le mail nella pagina contattaci
 
 var server = app.listen(8888, function () {//far girare un server con express, gli passo la porta dove ascoltare e una funzione che va scritta cosi credo in ogni caso
-    var host = server.address().address;
     var port = server.address().port;
   
-    console.log('Example app listening at http://%s:%s', host, port);
+    console.log('Example app listening at http://localhost:%s', port);
   });
 

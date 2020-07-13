@@ -1,0 +1,117 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "FitPlace da la possibilità, ai soli utenti loggati, di localizzarsi e cercare punti d'interesse per quanto riguarda il fitness in un range prestabilito.",
+    "version" : "1.0.0",
+    "title" : "FitPlace",
+    "contact" : {
+      "email" : "grossi.1792456@studenti.uniroma1.it"
+    },
+    "license" : {
+      "name" : "Apache 2.0",
+      "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/Manuz98/Prova1/1.0.0",
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "summary" : "Pagina di login",
+        "description" : "Pagina visualizzata al momento della connessione al server",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna la pagina inziale"
+          }
+        }
+      }
+    },
+    "/index" : {
+      "get" : {
+        "summary" : "Pagina principale",
+        "description" : "Pagina visualizzata dopo l'autenticazione",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna la pagina principale"
+          }
+        }
+      }
+    },
+    "/contattaci" : {
+      "get" : {
+        "summary" : "Pagina contattaci",
+        "description" : "Pagina con i contatti degli sviluppatori",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna la pagina dei contatti"
+          }
+        }
+      }
+    },
+    "/mappa" : {
+      "get" : {
+        "summary" : "Pagina con mappa",
+        "description" : "Pagina con mappa in grado di visualizzare i punti di interesse (palestre,piscine,parchi,centri sportivi) in tutto il mondo e di geolocalizzare l'utente",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna la pagina con la mappa"
+          }
+        }
+      }
+    },
+    "/chat" : {
+      "get" : {
+        "summary" : "Pagina con chat",
+        "description" : "Pagina contenente un chat real-time per poter comunicare con chiunque sia connesso.",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna la pagina con la chat"
+          }
+        }
+      }
+    },
+    "/google" : {
+      "get" : {
+        "summary" : "Pagina google per l'autenticazione",
+        "description" : "Pagina google per fare l'autenticazione con la possibilità di inserire il proprio account",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna la pagina per l'autenticazione"
+          }
+        }
+      }
+    },
+    "/google/callback" : {
+      "get" : {
+        "summary" : "Callback effettuata dopo l'autenticazione",
+        "description" : "Ritorna le info del utente",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Ritorna le info dell'utente e ci rimanda alla pagina index"
+          }
+        }
+      }
+    },
+    "/logout" : {
+      "get" : {
+        "summary" : "Logout",
+        "description" : "Setta la sessione a null",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Setta la sessione a null e ci rimanda alla pagina di login"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : { }
+}

@@ -17,6 +17,7 @@
     "express-session": "^1.17.1",
     "passport": "^0.4.1",
     "passport-google-oauth20": "^2.0.0",
+    "swagger-ui-express": "^4.1.4",
     "ws": "^7.3.1"
   }
 }
