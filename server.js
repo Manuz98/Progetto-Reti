@@ -28,12 +28,17 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(passport.initialize()); //inizializza passport
 app.use(passport.session());    //passport session                                         
 
-app.use(cookieSession({
-    name: 'session',
-    keys: ['key1', 'key2']
-}));
+app.use(cookieSession({     //cookie-session può essere utilizzata per memorizzare una sessione "leggera".
+    name: 'session',        //Memorizza solo un identificatore di sessione sul client all'interno di un cookie
+    keys: ['key1', 'key2']  //e archivia i dati della sessione sul server. Se quindi usciamo dal sito mantenendo aperto il browser,
+}));                        //possiamo rientrare nel sito senza doverci loggare di nuovo.
 
 app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveUninitialized: true })); //sessione express con opzioni
+//Crea un middleware di sessione con le opzioni fornite. I dati di sessione non vengono salvati 
+//nel cookie stesso, ma solo nell'ID sessione. I dati della sessione sono memorizzati sul lato server.
+//secret è il segreto(chiave) utilizzato per firmare il cookie ID sessione. 
+//resave:true forza il salvataggio della sessione nell'archivio sessioni, anche se la sessione non è mai stata modificata durante la richiesta.
+//saveUninitialized:true forza una sessione "non inizializzata" a essere salvata. Una sessione non è inizializzata quando è nuova ma non modificata.
 
 
 //se usiamo app.set come visto sopra non c'è piu bisogno di __dirname.  i file che gli passeremo li andrà a cercare direttamente nella cartella views di default

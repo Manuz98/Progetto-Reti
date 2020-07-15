@@ -27,20 +27,19 @@
       <!-- importo la navbar -->
       <%- include("./parziali/nav.ejs") %>
 
-      <h1>Benvenuti nel nostro sito</h1>
-      <h2>Per poter continuare</h2>
-      <h2>Accedere con google</h2>
-      
-  <div class="container-fluid">
-    <div class="row justify-content-center">
-      <a class="google-btn" href="/google">
-        <div class="google-icon-wrapper">
-          <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+      <div class="container-fluid">
+        <div class="row justify-content-center" style="margin-top:10%">
+          <h1>Benvenuti in FitPlace</h1>
+          <h6>L'applicazione da la possibilità, ai soli utenti loggati, di localizzarsi e cercare punti d'interesse, per quanto rigurda il fitness, in un range prestabilito.</h6>
+          <h3>Accedi con google &nbsp;</h3>  
+          <a class="google-btn" href="/google">
+            <div class="google-icon-wrapper">
+              <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+            </div>
+            <p class="btn-text"><b>Sign in with google</b></p>
+          </a>
         </div>
-        <p class="btn-text"><b>Sign in with google</b></p>
-      </a>
-    </div>
-  </div>
+      </div>
 
   <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
     </body>
