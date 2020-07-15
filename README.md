@@ -27,7 +27,7 @@ L'applicazione da la possibilità, ai soli utenti loggati, di localizzarsi e cer
   
   - NearbySearch: si effettua una richiesta passando latitudine, longitudine, il tipo di cosa si sta ricercando e il raggio d'interesse per trovare un insieme di luoghi di quel tipo. La ricerca può esser fatta su: 
 
-gym poll park football
+gym spa park stadium
 
 ## **OAUTH**
 

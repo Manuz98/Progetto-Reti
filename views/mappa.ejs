@@ -46,7 +46,7 @@ defer
   function initMap()  //funzione per inizializzare la mappa a una certa latitudine e longitudine e con un certo zoom
   {
     var centro = new google.maps.LatLng(41.9109,12.4818); //inizializzo la mappa a roma, in caso in cui l'utente non volesse autorizzare la geolocalizzazione
-    var photo=$('#photo').val();
+    var name=$('#name').val();
     map = new google.maps.Map(document.getElementById('map'), {         //creo un nuovo oggetto mappa di google passandogli il nodo del DOM nel quale posizionarla e altri parametri come lo zoom e la posizione iniziale
         center: centro,
         zoom: 13
@@ -72,7 +72,7 @@ defer
           lng: p.coords.longitude 
         };
         userInfoWindow.setPosition(position);    //dopodiche posizioniamo la infowindow in quel punto
-        userInfoWindow.setContent("<img src="+photo+" style="+"width:"+"60px;"+"border-radius:"+"10px;"+"heigth:60px;></img>");
+        userInfoWindow.setContent(name+" ti trovi qui!");
         userInfoWindow.open(map);
   
         map.setCenter(position);        //appena carico la mappa localizzo l'utente e centro li la mappa oltre a visualizzare un popover in quel punto
@@ -113,7 +113,7 @@ defer
       }
       else if (document.getElementById('r2').checked) 
       {
-      rate_value = "pool";
+      rate_value = "spa";
       }
       else if (document.getElementById('r3').checked) 
       {
@@ -121,7 +121,7 @@ defer
       }
       else if (document.getElementById('r4').checked) 
       {
-      rate_value = "football";
+      rate_value = "stadium";
       }
   
   //window.alert(rate_value);
@@ -319,7 +319,7 @@ defer
     </div>
 
   <div id="form">
-      <input type="hidden" id="photo" value="<%=user.photos[0].value%>">
+      <input type="hidden" id="name" value="<%=user.displayName%>">
       <input type="textarea" class="form-control form-control-lg" placeholder="Dove vuoi cercare?" id="indirizzo">
       <input value="vai" class="btn btn-success btn-block" type="button" id="submit">
       <input value="pulisci" class="btn btn-danger btn-block"  type="button" id="cancella">
