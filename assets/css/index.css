@@ -15,7 +15,7 @@ p,li,ul{text-align: center; list-style-type: none; padding:0;}
     width:100%;
   }
 .display-calc {
-    background: none;
+    background: white;
     color: #2c3e50;
     font-size: 24pt;
     border: #00eeff solid 4px;   

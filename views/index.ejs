@@ -37,21 +37,21 @@
             
             <div class="row justify-content-center">
                 <div class="col-sm-3">
-                  <input type="number" name="eta"class="form-control" placeholder="Età">
+                  <input type="number" id="eta" class="form-control" placeholder="Età">
                 </div>
                 <div class="col-sm-3">
-                  <input type="number" name="peso"class="form-control" placeholder="Peso corporeo (Kg)">
+                  <input type="number" id="peso"class="form-control" placeholder="Peso corporeo (Kg)">
                 </div>
               </div>
               <br>
               <div class="row justify-content-center">
                 <div class="col-sm-3">
-                  <input type="number" name="altezza" class="form-control" placeholder="Altezza (cm)">
+                  <input type="number" id="altezza" class="form-control" placeholder="Altezza (cm)">
                 </div>
                 <div class="col-sm-3">
-                  <select id="inputState" name="sesso" class="form-control" placeholder="Sesso">
-                    <option>Femmina</option>
-                    <option>Maschio</option>
+                  <select id="sesso" class="form-control" placeholder="Sesso">
+                    <option  value="femmina">Femmina</option>
+                    <option value="maschio">Maschio</option>
                   </select>
                 </div>
                 </div>
@@ -60,13 +60,13 @@
                 <br>
             <div class="row justify-content-center ">
                 <div class="col-sm-2">
-                    <button type="submit" style="width: 30vh;" name="calcolametabolismo" id="calcolametabolismo" class="btn btn-primary calcolametabolismo">Metabolismo basale</button>
+                    <button type="submit" style="width: 30vh;" name="calcolametabolismo" id="calcolametabolismo" class="btn btn-primary calcolametabolismo">Metabolismo basale (Kcal)</button>
                 </div>
                 <div class="col-sm-2">
-                    <button type="submit" style="width: 30vh;" name="massagrassa" class="btn btn-primary calcolamassagrassa">Massa grassa</button>
+                    <button type="submit" style="width: 30vh;" name="massagrassa" class="btn btn-primary calcolamassagrassa">Massa grassa (%)</button>
                 </div>
                 <div class="col-sm-2">
-                    <button type="submit" style="width: 30vh;" name="massamagra" class="btn btn-primary calcolamassamagra">Massa magra</button>
+                    <button type="submit" style="width: 30vh;" name="massamagra" class="btn btn-primary calcolamassamagra">Massa magra (%)</button>
                 </div>
                 
 
@@ -74,57 +74,66 @@
             </div>
             <br>
             <div class="row justify-content-center">
-                <input type="text" name="display" id="display"  disabled class="display-calc">
-                
+                <input type="text" name="display" id="display" style="text-align: center;" disabled class="display-calc">
             </div>
-            <div class="row justify-content-center">
-                <p id="demo"></p>
-            </div>
-           
-            
-
-        </div>
-    
+        </div>  
     </div>
-
-
-        
-        <script type="text/javascript">
-            
+        <script>
+            $(document).ready(function(){
                 $('.calcolametabolismo').click(function(event){
                     event.preventDefault();
                     event.stopPropagation();
                     var eta = $('#eta').val();
                     var altezza = $('#altezza').val();
-                    var formula = eval("eta + altezza") ;
-                    document.getElementById("display").innerHTML = formula;
-                    window.alert(formula);
-                  
-                   
-
-                    
-                    
-                    
-
-                    var res = a + b + c;
+                    var peso = $('#peso').val();
+                    var sesso = $('#sesso').val();
+                    if (sesso==="femmina"){
+                            var formula =((10*parseFloat(peso))+(6.25*parseFloat(altezza))-(5*parseFloat(eta))-161);
+                            $('#display').val(formula);
+                        }
+                    else{
+                        var formula= ((10 * parseFloat(peso)) + (6.25* parseFloat(altezza)) - (5*parseFloat(eta))+5);
+                        $('#display').val(formula) ;
+                    }
                 });
                 $('.calcolamassagrassa').click(function(event){
                     event.preventDefault();
                     event.stopPropagation();
                     var eta = $('#eta').val();
                     var altezza = $('#altezza').val();
-                    var formula = eta+altezza;
-                    $('#display:text').val(formula);
+                    var peso = $('#peso').val();
+                    var sesso = $('#sesso').val();
+                    var BMI= parseFloat(peso) /(2* (parseFloat(altezza)/100));
+                    if (sesso==="femmina"){
+                            var formula = (1.20*BMI)+(0.23*parseFloat(eta))-5.4;
+                            $('#display').val(formula);
+                        }
+                    else{
+                        var formula= (1.20*BMI)+(0.23*parseFloat(eta))-16.2;
+                        $('#display').val(formula);
+                    }
                 });
                 $('.calcolamassamagra').click(function(event){
                     event.preventDefault();
                     event.stopPropagation();
                     var eta = $('#eta').val();
                     var altezza = $('#altezza').val();
-                    var formula = eta+altezza;
-                    $('#display:text').val(formula);
+                    var peso = $('#peso').val();
+                    var sesso = $('#sesso').val();
+                    var duew=parseFloat(peso)*2;
+                    var dueh=parseFloat(altezza)*2;
+                    if (sesso==="femmina"){
+                        var formula = ((1.07*parseFloat(peso))-148*((duew*duew) / (dueh*dueh)));
+                        $('#display').val(formula);
+                        }
+                    else{
+                        var formula = ((1.10*parseFloat(peso))-128*((duew*duew) / (dueh*dueh)));
+                        $('#display').val(formula);
+                    }
                 });
-        
+                
+               
+            });
         </script>
           
 
