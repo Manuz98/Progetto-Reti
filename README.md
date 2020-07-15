@@ -23,6 +23,9 @@ L'applicazione da la possibilità, ai soli utenti loggati, di localizzarsi e cer
 ## **REST API**
 
 - Google Api:
+  
+  - Maps JavaScript API: consente di personalizzare le mappe con i propri contenuti e immagini per la visualizzazione su pagine web e dispositivi mobili.
+
   - Geocode: tramite una get passando l'indirizzo del luogo richiesto ci ritorna le sue informazioni dalle quali verranno prese latitudine e longitudine.
   
   - NearbySearch: si effettua una richiesta passando latitudine, longitudine, il tipo di cosa si sta ricercando e il raggio d'interesse per trovare un insieme di luoghi di quel tipo. La ricerca può esser fatta su: 
