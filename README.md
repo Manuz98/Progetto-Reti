@@ -34,7 +34,7 @@ gym spa park stadium
 
 ## **OAUTH**
 
-- Google Login: Implementato con Passport, richiede l'autenticazione e restituisce le informazioni base del proprio profilo(id,nome,email).
+- Google Login: Implementato con Passport, richiede l'autenticazione e restituisce le informazioni base del proprio profilo(id,cognome,nome,email,foto del profilo).
 
 ## **Funzionalità**
 

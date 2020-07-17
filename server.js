@@ -1,16 +1,13 @@
-require("dotenv").config();
-require('./passport-setup');
-var express = require('express');   
-var bodyParser = require("body-parser");  
-const passport=require('passport');
+require("dotenv").config();  //modulo per leggere variabili dal .env
+require('./passport-setup'); //richiamo il file passport-setup
+var express = require('express'); //modulo che ci permette di effettuare chiamate http  
+var bodyParser = require("body-parser");//modulo che permette il passaggio di parametri dal client al server. lo usiamo per la gestione dei post dalle form  
+const passport=require('passport');//modulo per oauth
 const cookieSession = require('cookie-session');
-const swaggerUi=require('swagger-ui-express');
-const swaggerDocument=require('./swagger.json');
-//npm install express   ---->   modulo che ci permette di effettuare chiamate http 
-//npm install body-parser  ---->  modulo che permette il passaggio di parametri dal client al server. lo usiamo per la gestione dei post dalle form 
+const swaggerUi=require('swagger-ui-express'); //modulo per la documentazione swagger
+const swaggerDocument=require('./swagger.json');//richiamo il file swagger.json
 //npm install ejs   -->  installiamo EJS che ci permetterà di creare i template(nella cartella view) ai quali potremo anche passare dati dinamicamente.
-//                         per adesso i dati che passeremo saranno variabili dichiarate qui, poi dovremo implementare un DB per i nosti dati.
-
+//                       per adesso i dati che passeremo saranno variabili dichiarate qui.
 
 var app = express();
 
@@ -20,13 +17,14 @@ app.set('view engine', 'ejs');    //usiamo il metodo set di app (variabile expre
 
 //middleware per gestire richieste a file statici e poter quindi usare fogli di stile e altri file esterni e parametri tramite post
 
-app.use(bodyParser.urlencoded({ extended: false }));  //usato per permettere il passagio dei parametri tramite post
+app.use(bodyParser.urlencoded({ extended: false }));//usato per permettere il passagio dei parametri tramite post
 app.use('/assets',express.static('assets')) //funzione static di express fatta apposta per gestire i file statici
-//in questo modo quando riceviamo una richiesta ad un url /assets/..   verà mappata alla cartella asstes
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+                                            //in questo modo quando riceviamo una richiesta ad un url /assets/..   verà mappata alla cartella asstes
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));//utilizziamo http://localhost:8888/api-docs per visionare la documentazione
 
-app.use(passport.initialize()); //inizializza passport
-app.use(passport.session());    //passport session                                         
+app.use(passport.initialize()); //Nelle app basate su express il middleware passport.initialize() è necessario per inizializzare Passport
+app.use(passport.session());    //La nostra app utilizza sessioni di accesso persistenti, è necessario utilizzare anche il middleware passport.session().                                         
+//I middleware sono funzioni che hanno accesso all'oggetto richiesta (req), all'oggetto risposta (res) e alla successiva funzione middleware nel ciclo richiesta-risposta dell'applicazione.
 
 app.use(cookieSession({     //cookie-session può essere utilizzata per memorizzare una sessione "leggera".
     name: 'session',        //Memorizza solo un identificatore di sessione sul client all'interno di un cookie
@@ -80,18 +78,17 @@ app.get('/chat', function(req, res){      //get alla pagina contattaci
 
 app.get('/google', passport.authenticate('google', { scope: ['profile','email'] })); //funzione chiamata una volta cliccato il bottone signin
 
-app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), //funzione chiamata un volta fatto il login
-  function(req, res) {
-    // Successful authentication, redirect home.
+app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), //funzione chiamata un volta fatto il login, se qualcosa va storto
+  function(req, res) {                                                                 //vengo rimandato al pagina iniziale altrimenti(continua sotto..)
+    // Autenticazione eseguita, redirect index.
     req.session.user=req.user; //salvo i dati del profilo nella sessione
     res.render("index",{user:req.session.user});//vengo rediretto su index passando user (in cui ci sono i dati dell'utente)
 });
   
-app.get('/logout', function(req,res){ //funzione chiamata nel momento del logout
-    res.session=null;
-    req.session.user=null;
-    req.logout();    
-    res.redirect('/'); 
+app.get('/logout', function(req,res){ //funzione chiamata nel momento in cui clicco su logout
+    req.session.user=null;    //metto a null il campo user all'interno della sessione
+    req.logout();             //rimuove la proprieta` req.user e cancella la sessione di login(se presente)
+    res.redirect('/');        //vengo rimandato alla pagina iniziale
 }); 
 //parte per la gestione della CHAT:
 //documentazione ed esempi su modulo ws: https://www.npmjs.com/package/ws
