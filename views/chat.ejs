@@ -37,10 +37,10 @@
 
 
         <form>
-            <%if(user){%>
+            <%if(user){%> <!--controlla che ci sia una sessione attiva-->
             <div id="welcome">Hello <%=user.displayName%></div>
             <input type="hidden" id="name" name="name" value=<%=user.displayName%>/> <!-- se metto value tra apici rimane christian grifoni per tutto il tempo-->
-            <%}else{%>
+            <%}else{%> 
             <div id="name-div"> 
                <input class="form-control float-left" type="textarea" id="name" name="name" autocomplete="off" autofocus placeholder="Enter your nickname"/> 
                 <button class="btn btn-success float-right">Submit</button>

@@ -1,5 +1,5 @@
 require("dotenv").config();  //modulo per leggere variabili dal .env
-require('./passport-setup'); //richiamo il file passport-setup
+require('./passport-setup'); //richiamo il file passport-setup.js
 var express = require('express'); //modulo che ci permette di effettuare chiamate http  
 var bodyParser = require("body-parser");//modulo che permette il passaggio di parametri dal client al server. lo usiamo per la gestione dei post dalle form  
 const passport=require('passport');//modulo per oauth
@@ -22,7 +22,7 @@ app.use('/assets',express.static('assets')) //funzione static di express fatta a
                                             //in questo modo quando riceviamo una richiesta ad un url /assets/..   verà mappata alla cartella asstes
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));//utilizziamo http://localhost:8888/api-docs per visionare la documentazione
 
-app.use(passport.initialize()); //Nelle app basate su express il middleware passport.initialize() è necessario per inizializzare Passport
+app.use(passport.initialize()); //Nelle app basate su express il middleware passport.initialize() è necessario per inizializzare Passport(passport = framework javascript che implementa oauth)
 app.use(passport.session());    //La nostra app utilizza sessioni di accesso persistenti, è necessario utilizzare anche il middleware passport.session().                                         
 //I middleware sono funzioni che hanno accesso all'oggetto richiesta (req), all'oggetto risposta (res) e alla successiva funzione middleware nel ciclo richiesta-risposta dell'applicazione.
 
@@ -41,11 +41,11 @@ app.use(require('express-session')({ secret: 'keyboard cat', resave: true, saveU
 
 //se usiamo app.set come visto sopra non c'è piu bisogno di __dirname.  i file che gli passeremo li andrà a cercare direttamente nella cartella views di default
 app.get('/',function(req, res){      //get alla root
-  if(req.session.user){
+  if(req.session.user){              //controlla se esiste una sessione
     res.redirect("index")
   }   
-  res.render("login",{user:req.session.user}) 
-});
+  res.render("login",{user:req.session.user}) //user, variabile inizializzata con i dati dell utente che usiamo in login.ejs passata con render
+});                                            
 
 app.get('/index',function(req, res){      //get alla index
     if(!req.session.user){
@@ -76,12 +76,12 @@ app.get('/chat', function(req, res){      //get alla pagina contattaci
     res.render("chat",{user:req.session.user})  
 });
 
-app.get('/google', passport.authenticate('google', { scope: ['profile','email'] })); //funzione chiamata una volta cliccato il bottone signin
+app.get('/google', passport.authenticate('google', { scope: ['profile','email'] })); //funzione chiamata una volta cliccato il bottone signin che ci porta alla pagina di log in di google. Autenticate è una funzione del passport che ci permette di autenticarci. Gli passiamo il provider e i dati a cui vogliamo accedere
 
 app.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), //funzione chiamata un volta fatto il login, se qualcosa va storto
-  function(req, res) {                                                                 //vengo rimandato al pagina iniziale altrimenti(continua sotto..)
-    // Autenticazione eseguita, redirect index.
-    req.session.user=req.user; //salvo i dati del profilo nella sessione
+  function(req, res) {                                                                //vengo rimandato al pagina iniziale altrimenti(continua sotto..)
+    //Se Autenticazione eseguita, redirect index.
+    req.session.user=req.user; //salvo i dati del profilo nella sessione. Quindi vivono finche l'utente rimane loggato
     res.render("index",{user:req.session.user});//vengo rediretto su index passando user (in cui ci sono i dati dell'utente)
 });
   
@@ -90,6 +90,8 @@ app.get('/logout', function(req,res){ //funzione chiamata nel momento in cui cli
     req.logout();             //rimuove la proprieta` req.user e cancella la sessione di login(se presente)
     res.redirect('/');        //vengo rimandato alla pagina iniziale
 }); 
+
+
 //parte per la gestione della CHAT:
 //documentazione ed esempi su modulo ws: https://www.npmjs.com/package/ws
 const WebSocketServer = require('ws').Server,       //richiedo il modulo che ci permette di creare websocket e creiamo un server

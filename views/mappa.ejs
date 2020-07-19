@@ -25,7 +25,7 @@
         <!-- chiamata api a google map per poter visualizzare la mappa, nella chiamata dobbiamo anche mettere la libreria places che ci servirà per la ricerca dei punti di interesse-->
 <!-- info su come trattare l'api: https://developers.google.com/maps/documentation/javascript/tutorial#maps_map_simple-css  -->
 <script
-src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&libraries=places&v=weekly"
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBv0S_RSwda2sNfvrpJqlUa5Bmdxi4MQ9U&callback=initMap&libraries=places&v=weekly"
 defer
 ></script>   <!-- effettuo a chiamata a maps javascript api che mi restituisce una mappa-->
 
@@ -62,6 +62,7 @@ defer
   //parte per la geolocalizzazione
     userInfoWindow = new google.maps.InfoWindow();
   
+    //HTML 5
     if(navigator.geolocation)     //prende la posizione dell'utente attraverso il browser
      {
        navigator.geolocation.getCurrentPosition(function(p){                     //chiamo il metodo getcurrent position di navigator.geolocation e associo una callback
@@ -71,6 +72,8 @@ defer
           lat: p.coords.latitude,
           lng: p.coords.longitude 
         };
+
+        
         userInfoWindow.setPosition(position);    //dopodiche posizioniamo la infowindow in quel punto
         userInfoWindow.setContent(name+" ti trovi qui!");
         userInfoWindow.open(map);
@@ -124,7 +127,7 @@ defer
       rate_value = "stadium";
       }
   
-  //window.alert(rate_value);
+
        request = {
         location: event.latLng,
         radius: 8047,                        //anche qui dovremo risettare in base a cio che ha inserito l'utente
@@ -136,6 +139,7 @@ defer
   
   //FINE RICERCA LUOGHI DI INTERESSE
   
+
   //INIZIO GEOCODER
   
      geocoder = new google.maps.Geocoder();  // documentazione: https://developers.google.com/maps/documentation/javascript/geocoding
@@ -155,6 +159,8 @@ defer
   
   //FINE GEOCODER
 
+
+
   //INIZIO AUTOCOMPLETE    documentazione: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete
   var input = document.getElementById('indirizzo'); //prenso l'indirizzo da completare dalla textarea
 
@@ -164,7 +170,7 @@ defer
             ['address_components', 'geometry', 'icon', 'name']);  //i campi che voglio appaiano nell'autocompletamento
 
           autocomplete.addListener('place_changed', function() {   //
-          infowindow.close();
+          infowindow.close(); //bho
           marker.setVisible(false);
           var place = autocomplete.getPlace();
           if (!place.geometry) {   //se non ci sono dati da suggerire per il luogo inserito
@@ -305,16 +311,16 @@ defer
 
     <div id="rates" class="btn-group btn-group-toggle" data-toggle="buttons">
       <label class="btn btn-secondary active">
-        <input type="radio" name="options" id="r1" autocomplete="off" checked value="gym"> palestre
+        <input type="radio" name="options" id="r1" autocomplete="off" checked> palestre
       </label>
       <label class="btn btn-secondary">
-        <input type="radio" name="options" id="r2" autocomplete="off" value="swimming pool"> piscine
+        <input type="radio" name="options" id="r2" autocomplete="off"> spa
       </label>
       <label class="btn btn-secondary">
-        <input type="radio" name="options" id="r3" autocomplete="off" value="public park"> parchi
+        <input type="radio" name="options" id="r3" autocomplete="off"> parchi
       </label>
       <label class="btn btn-secondary">
-        <input type="radio" name="options" id="r4" autocomplete="off" value="football"> campi da calcio
+        <input type="radio" name="options" id="r4" autocomplete="off"> campi da calcio
       </label>
     </div>
 
